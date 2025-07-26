@@ -173,6 +173,9 @@ unsigned long previousMillisLED = 0;                // Record the time of  the l
 
 void setup()
 {
+    // short 3s delay to give some time to connect for programming after reset
+    delay(3000);
+
     //  serial init to usb
     SHOW_SERIAL.begin(USB_SERIAL_BAUD_RATE);
     // Synth initialization. Since a hardware serial port is used here, the software serial port is commented out.
@@ -199,11 +202,18 @@ void setup()
         StateManager::releaseInstance();
         return ;
     }
-    Serial.println("synth and state machine ready!");
+
+    /* prepare the MIDI input */
+    midi_com_setup();
+
+    SHOW_SERIAL.println("synth and state machine ready!");
 }
 
 void loop()
 {
+    /* processing received MIDI data */
+    midi_com_loop();
+
     Event* event = getNextEvent();
     if(event != nullptr)
     {
