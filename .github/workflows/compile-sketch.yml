@@ -41,3 +41,5 @@ jobs:
                 name: ML_SynthTools
               - source-url: https://github.com/marcel-licence/ML_SynthTools_Lib.git
                 name: ML_SynthTools_Lib
+              - source-url: https://github.com/Seeed-Studio/Seeed_Arduino_MIDIMaster.git
+                name: Seeed_Arduino_MIDIMaster
