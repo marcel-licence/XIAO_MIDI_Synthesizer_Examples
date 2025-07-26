@@ -19,8 +19,7 @@ jobs:
       matrix:
         fqbn:
           - esp32:esp32:XIAO_ESP32C3
-        sketch-paths:        
-          - MidiFilePlayer
+        sketch-paths:
           - MidiLivePlayback
     steps:
       - name: Checkout repository
