@@ -14,6 +14,15 @@ Each example is organized in its own subfolder with a dedicated README for detai
 - **Description:** Custom MIDI player & sequencer for live playback.
 - **Documentation:** See the [MidiLivePlayback README](MidiLivePlayback/README.md) for more information.
 
+## Requirements
+
+To run the examples in this repository, you will need:
+
+- [ML_SynthTools](https://github.com/marcel-licence/ML_SynthTools) (main repository)
+- [ML_SynthTools_Lib](https://github.com/marcel-licence/ML_SynthTools_Lib) (some examples may require this library)
+- Arduino IDE with support for Seeed XIAO boards
+- Standard Arduino MIDI libraries (for MIDI parsing, playback, sequencer, etc.)
+
 ## Presentation
 
 Check out a demonstration on YouTube:  
