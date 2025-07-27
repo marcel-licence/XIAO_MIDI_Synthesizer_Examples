@@ -33,7 +33,8 @@ Coming soon...
 
 To run the examples in this repository, you will need:
 
-- [ML_SynthTools](https://github.com/marcel-licence/ML_SynthTools) (some examples may require this library)
+- [Seeed_Arduino_MIDIMaster](https://github.com/Seeed-Studio/Seeed_Arduino_MIDIMaster) (required)
+- [ML_SynthTools](https://github.com/marcel-licence/ML_SynthTools) (required)
 - [ML_SynthTools_Lib](https://github.com/marcel-licence/ML_SynthTools_Lib) (some examples may require this library)
 
 ## Presentation
