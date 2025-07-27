@@ -51,6 +51,7 @@
 
 
 #include <Arduino.h>
+#include "MidiPlayerMode.h"
 #include "AuditionMode.h"
 #include "SAM2695Synth.h"
 #include "Button.h"
@@ -58,6 +59,8 @@
 #include "TrackMode.h"
 #include "ErrorState.h"
 #include "music.h"
+
+#include <ml_midi_player.h> /* requires ML_SynthTools_Lib library from https://github.com/marcel-licence/ML_SynthTools_Lib */
 
 //LED toggle events corresponding to different modes
 #define STATE_1_LED_TIME 2000
@@ -173,6 +176,8 @@ unsigned long previousMillisLED = 0;                // Record the time of  the l
 
 void setup()
 {
+    delay(3000);
+
     //  serial init to usb
     SHOW_SERIAL.begin(USB_SERIAL_BAUD_RATE);
     // Synth initialization. Since a hardware serial port is used here, the software serial port is commented out.
@@ -187,6 +192,7 @@ void setup()
     initButtons(BUTTON_D_PIN);
     delay(3000);
     //regist three mode state
+    manager->registerState(new MidiPlayerMode());
     manager->registerState(new AuditionMode());
     manager->registerState(new BpmMode());
     manager->registerState(new TrackMode());
@@ -194,16 +200,105 @@ void setup()
     ErrorState* errorState = new ErrorState();
     manager->registerState(errorState);
     //init state machine
-    if(!(stateMachine.init(manager->getState(AuditionMode::ID), errorState)))
+    if (!(stateMachine.init(manager->getState(MidiPlayerMode::ID), errorState)))
     {
         StateManager::releaseInstance();
         return ;
     }
+    midi_player_setup("/demo.mid");
+	
+    midi_com_setup();
+		
     Serial.println("synth and state machine ready!");
 }
 
+static int fileIndex = 0;
+static bool start_next_song;
+
+void app_play_next_song(void)
+{
+    fileIndex++;
+    if (midi_player_setup(fileIndex))
+    {
+
+    }
+    else
+    {
+        fileIndex = 0;
+        (void)midi_player_setup(fileIndex);
+    }
+}
+
+void app_play_prev_song(void)
+{
+    if (fileIndex > 0)
+    {
+        fileIndex--;
+        if (midi_player_setup(fileIndex))
+        {
+
+        }
+        else
+        {
+            fileIndex = 0;
+            (void)midi_player_setup(fileIndex);
+        }
+    }
+}
+
+void app_play_pause_song(void)
+{
+    if (ml_midi_player_is_active())
+    {
+        ml_midi_player_stop();
+    }
+    else
+    {
+        ml_midi_player_play();
+    }
+}
+
+void app_rewind_song(void)
+{
+    ml_midi_player_rewind();
+}
+
+void ml_midi_player_song_end(void)
+{
+    start_next_song = true;
+}
+
+void app_auto_play_next_check(void)
+{
+    if (start_next_song)
+    {
+        start_next_song = false;
+
+        COM_SERIAL.printf("running done!\n");
+        {
+            uint8_t gm_reset_msg[] = {0xF0, 0x7E, 0x7F, 0x09, 0x01, 0xF7};
+            COM_SERIAL.write(gm_reset_msg, sizeof(gm_reset_msg));
+        }
+
+        delay(500);
+		
+        app_play_next_song();
+    }
+}
+
+void app_process_midi_player(void)
+{
+    uint32_t current_millis = millis();
+    static uint32_t last_millis = 0;
+    uint32_t elapsed_millis = current_millis - last_millis;
+    ml_midi_player_loop(elapsed_millis);
+    last_millis = current_millis;
+}
+	
 void loop()
 {
+    midi_com_loop();
+	
     Event* event = getNextEvent();
     if(event != nullptr)
     {
@@ -213,6 +308,10 @@ void loop()
     }
     multiTrackPlay();
     ledShow();
+
+	app_auto_play_next_check();
+
+	app_process_midi_player();
 }
 
 Event* getNextEvent()

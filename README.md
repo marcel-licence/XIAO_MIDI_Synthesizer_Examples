@@ -8,11 +8,26 @@ Here you will find personal custom examples for the Seeed XIAO MIDI Synthesizer.
 This repository contains various example projects demonstrating how to use the XIAO MIDI Synthesizer.  
 Each example is organized in its own subfolder with a dedicated README for details.
 
-### Example: MidiLivePlayback
+## Examples
+
+### MidiLivePlayback
+
+This project allows to connect a MIDI controller for live playback.
 
 - **Folder:** [`MidiLivePlayback`](MidiLivePlayback/)
-- **Description:** Custom MIDI player & sequencer for live playback.
-- **Documentation:** See the [MidiLivePlayback README](MidiLivePlayback/README.md) for more information.
+- **Readme:** [MidiLivePlayback README](MidiLivePlayback/README.md)
+
+### MidiFilePlayer
+
+This project plays MIDI files stored to litteFS.
+Additional live playback / play along is possible.
+
+- **Folder:** [`MidiFilePlayer`](MidiFilePlayer/)
+- **Readme:** [MidiFilePlayer README](MidiFilePlayer/README.md)
+
+### MidiSequencer
+
+Coming soon...
 
 ## Requirements
 
