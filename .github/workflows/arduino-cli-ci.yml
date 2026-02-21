@@ -73,6 +73,10 @@ jobs:
           - board: { name: "Raspberry Pi Pico 2" }
           - board: { name: "Pimoroni PicoPlus2" }
 
+          - board:
+              name: "Seeeduino XIAO (SAMD21)"
+            sketch: MidiFilePlayer
+
     steps:
     - uses: actions/checkout@v4
       with:
