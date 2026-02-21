@@ -145,8 +145,8 @@ jobs:
       uses: softprops/action-gh-release@v2
       with:
         files: |
-	  build/**/*.bin
-	  build/**/*.uf2
-	  build/**/*.hex
+          build/**/*.bin
+          build/**/*.uf2
+          build/**/*.hex
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
